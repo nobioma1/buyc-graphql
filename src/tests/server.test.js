@@ -71,4 +71,41 @@ describe('Server', () => {
       },
     });
   });
+
+  test('[query calculatePrice] Calculate "BUY"', async () => {
+    const { server } = constructTestServer();
+    const { query } = createTestClient(server);
+
+    const rate = 10093.92;
+    const exchangeRate = 357;
+    const margin = 0.1;
+    const computedMargin = margin * rate;
+
+    const mockRes = {
+      data: {
+        bpi: {
+          USD: {
+            code: 'USD',
+            rate: `${rate}`,
+            description: 'United States Dollar',
+            rate_float: rate,
+          },
+        },
+      },
+    };
+
+    axios.get.mockResolvedValue(mockRes);
+
+    const res = await query({
+      query: CALCULATE_PRICE,
+      variables: { type: 'buy', margin, exchangeRate },
+    });
+
+    expect(res.data).toEqual({
+      calculatePrice: {
+        value: (rate + computedMargin) * exchangeRate,
+        currency: 'NGN',
+      },
+    });
+  });
 });
