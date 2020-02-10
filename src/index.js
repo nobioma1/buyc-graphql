@@ -25,7 +25,7 @@
 // - Writing [good] tests is recommended and will attract extra points!
 // - Host the API wherever you want. Heroku is a good place to host something
 //   like this for free.
-
+require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
 const { ApolloServer } = require('apollo-server-express');
@@ -34,11 +34,15 @@ const http = require('http');
 const schema = require('./schema');
 const resolvers = require('./resolvers');
 
+const port = process.env.PORT || 5000;
+
 const app = express();
 
 app.use(cors());
 
 const server = new ApolloServer({
+  introspection: true,
+  playground: true,
   typeDefs: schema,
   resolvers,
 });
@@ -47,6 +51,6 @@ server.applyMiddleware({ app, path: '/graphiql' });
 
 const httpServer = http.createServer(app);
 
-httpServer.listen({ port: 5000 }, () =>
-  console.log(`server live at http://localhost:5000/graphiql`)
-);
+httpServer.listen({ port }, () => {
+  console.log(`server live at http://localhost:${port}/graphiql`);
+});
