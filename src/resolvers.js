@@ -20,8 +20,10 @@ const resolvers = {
           marginPercentage = price.rate + price.rate * args.margin;
         }
         // calcluate exchangeRate in NGN and not USD using the exchangeRate args
+        // fix to two decimal places
+        const value = (marginPercentage * args.exchangeRate).toFixed(2);
         return {
-          value: marginPercentage * args.exchangeRate,
+          value,
           currency: 'NGN',
         };
       } catch (error) {

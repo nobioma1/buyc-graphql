@@ -66,7 +66,7 @@ describe('Server', () => {
 
     expect(res.data).toEqual({
       calculatePrice: {
-        value: (rate - computedMargin) * exchangeRate,
+        value: ((rate - computedMargin) * exchangeRate).toFixed(2),
         currency: 'NGN',
       },
     });
@@ -103,7 +103,7 @@ describe('Server', () => {
 
     expect(res.data).toEqual({
       calculatePrice: {
-        value: (rate + computedMargin) * exchangeRate,
+        value: ((rate + computedMargin) * exchangeRate).toFixed(2),
         currency: 'NGN',
       },
     });
